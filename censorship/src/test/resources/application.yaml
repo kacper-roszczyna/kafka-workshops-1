@@ -1,0 +1,55 @@
+schema.registry:
+  url:
+  user: ""
+  password: ""
+
+kafka:
+  topics:
+    movies-topic: MOVIES
+    ratings-topic: RATINGS
+    output-topic: RATED_MOVIES
+  stores:
+    movies-store: MOVIES-STORE
+    ratings-store: RATINGS-STORE
+
+spring:
+  application:
+    name: MY_APPLICATION_NAME
+  jmx:
+    enabled: true
+  management:
+    endpoints:
+      web:
+        exposure:
+          include: "*"
+  main:
+    banner-mode: off
+    web-application-type: servlet
+    allow-bean-definition-overriding: true
+    allow-circular-references: true
+  jackson:
+    serialization:
+      FAIL_ON_EMPTY_BEANS: false
+      WRITE_DATES_AS_TIMESTAMPS: true
+    deserialization:
+      FAIL_ON_UNKNOWN_PROPERTIES: false
+  kafka:
+    bootstrap-servers:
+    properties:
+      schema.registry.url: mock://test
+      security.protocol: PLAINTEXT
+      state.dir: "target/_kafka-streams-store"
+      client.dns.lookup: resolve_canonical_bootstrap_servers_only
+    streams:
+      application-id: KACPER_CONSUMER_GROUP_ID
+      state-dir: "target/_kafka-streams-store"
+      bootstrap-servers:
+      properties:
+        application.server: localhost:9092
+        processing.guarantee: exactly_once_v2
+        auto.offset.reset: earliest
+        task.timeout.ms: 300000
+        commit.interval.ms: 1000
+        metrics.recording.level: DEBUG
+        num.stream.metrics.recording.levelthreads: 1
+#          topology.optimization: all
